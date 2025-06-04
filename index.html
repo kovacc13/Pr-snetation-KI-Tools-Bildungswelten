@@ -402,6 +402,8 @@
             background-color: #e85a4f;
             transform: translateY(-2px);
         }
+        /* #form-submission-message related styles can be removed if the div is removed */
+        /*
         #form-submission-message {
             margin-top: 15px;
             padding: 10px;
@@ -410,13 +412,14 @@
             font-weight: bold;
         }
         .success-message {
-            background-color: #d1e7dd; /* Bootstrap success green */
+            background-color: #d1e7dd;
             color: #0f5132;
         }
         .error-message {
-            background-color: #f8d7da; /* Bootstrap error red */
+            background-color: #f8d7da;
             color: #842029;
         }
+        */
 
 
         @media (max-width: 768px) {
@@ -621,10 +624,11 @@
                     <p style="color: #555;">✅ Kombinierte KI + Compliance Schulungen</p>
                 </div>
 
-                <!-- Contact Form -->
+                <!-- Contact Form - MODIFIED FOR FORMSPREE -->
                 <div class="contact-form-container" style="background: rgba(45, 122, 107, 0.9); margin-top:30px; border-radius:10px; padding:30px;">
                     <h4 style="color:white; text-align:center; font-size:1.5rem; margin-bottom:20px;">Nehmen Sie Kontakt auf!</h4>
-                    <form id="contactForm">
+                    <form action="https://formspree.io/f/mnnvnndg" method="POST">
+                        <input type="hidden" name="_subject" value="Neue Anfrage von Ihrer KI Web App!">
                         <div class="form-group">
                             <label for="name">Ihr Name:</label>
                             <input type="text" id="name" name="name" required aria-label="Ihr Name">
@@ -645,7 +649,7 @@
                              <button type="submit" class="submit-btn">Nachricht senden</button>
                         </div>
                     </form>
-                    <div id="form-submission-message" style="display:none;"></div>
+                    <!-- Das div mit id="form-submission-message" wurde entfernt, da Formspree die Bestätigung übernimmt -->
                 </div>
                  <!-- End Contact Form -->
 
@@ -694,7 +698,15 @@
             const workingDaysPerYear = parseFloat(document.getElementById('workingDaysPerYear').value) || 220; // Default 220 working days
 
             if (numEmployees <= 0 || timeSavedPerEmployee <= 0 || hourlyRate <= 0 || workingDaysPerYear <= 0) {
-                alert("Bitte geben Sie gültige positive Werte in alle Felder ein.");
+                // Using a custom styled message box instead of alert
+                const roiResultsDiv = document.getElementById('roi-results');
+                const annualSavingsP = document.getElementById('annualSavings');
+                if(roiResultsDiv && annualSavingsP) {
+                    annualSavingsP.innerHTML = `<strong style="color: red;">Bitte geben Sie gültige positive Werte in alle Felder ein.</strong>`;
+                    roiResultsDiv.style.display = 'block';
+                } else {
+                    console.error("ROI results elements not found for error message.");
+                }
                 return;
             }
 
@@ -710,37 +722,9 @@
             resultsDiv.style.display = 'block';
         }
 
-        // Contact Form Logic
-        const contactForm = document.getElementById('contactForm');
-        const submissionMessage = document.getElementById('form-submission-message');
-
-        if(contactForm) {
-            contactForm.addEventListener('submit', function(event) {
-                event.preventDefault(); // Prevent actual form submission
-
-                const name = document.getElementById('name').value;
-                const email = document.getElementById('email').value;
-                const message = document.getElementById('message').value;
-
-                if (!name.trim() || !email.trim() || !message.trim()) {
-                    submissionMessage.textContent = 'Bitte füllen Sie alle Pflichtfelder aus.';
-                    submissionMessage.className = 'error-message'; // Use for styling errors
-                    submissionMessage.style.display = 'block';
-                    return;
-                }
-
-                // Simulate form submission
-                submissionMessage.textContent = 'Vielen Dank für Ihre Nachricht! Wir werden uns in Kürze bei Ihnen melden.';
-                submissionMessage.className = 'success-message'; // Use for styling success
-                submissionMessage.style.display = 'block';
-                contactForm.reset(); // Clear the form
-
-                // Hide the message after a few seconds
-                setTimeout(() => {
-                    submissionMessage.style.display = 'none';
-                }, 5000);
-            });
-        }
+        // Der JavaScript-Block für die "Contact Form Logic" wurde entfernt,
+        // da die Formularübermittlung nun direkt über das HTML-Formular an Formspree erfolgt.
     </script>
 </body>
 </html>
+
